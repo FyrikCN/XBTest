@@ -1,0 +1,65 @@
+<!DOCTYPE HTML>
+<head>
+</head>
+<body>
+	<ul id="container">
+	</ul>
+<script>
+	var bigList = []
+	for (let i = 0; i < 200; i++) {
+		bigList.push(i)
+	}
+	console.log(bigList)
+	createList(bigList)
+	
+	function createList (bigList) {
+		let container = document.querySelector('#container')
+		container.onscroll = throttle(onListScroll, 50)
+		getItemReady(0)
+		function onListScroll (e) {
+			const i = Math.floor(e.target.scrollTop / 50)
+			getItemReady(i)
+			console.log(i)
+		}
+		function getItemReady (i) {
+			console.log(i)
+			container.innerHTML = bigList.slice(i, i + 20).map(
+			  item =>
+				`<li style="top: ${item * 50}px;">${item}</li>`)
+			  .join("");
+		}
+		function throttle(fn, delay) {
+			let lastTime = 0;
+			return function (...arg) {
+				const nowTime = +new Date();
+				if (nowTime - lastTime > delay) {
+					fn.apply(this, arg);
+					lastTime = nowTime;
+				}
+			}
+		}
+	}
+</script>
+</body>
+
+<style>
+#container {
+	position: relative;
+	width: 200px;
+	height: 10000px;
+	max-height: 500px;
+	margin: 0;
+	padding: 0;
+	border: 1px solid black;
+	overflow-y: auto;
+	list-style-type: none;
+}
+
+#container li {
+	position: absolute;
+	width: 100%;
+	height: 50px;
+	text-align: center;
+	line-height: 50px;
+}
+</style>
